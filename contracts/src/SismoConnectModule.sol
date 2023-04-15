@@ -51,6 +51,8 @@ contract SismoConnectModule is SismoConnect {
         groupId = _groupId;
     }
 
+    IOwnerManager ownerManager = IOwnerManager(address(safe));
+
     /// @dev Exec tx using zkConnect proof
     /// @param to Destination address of module transaction
     /// @param value Ether value of module transaction
@@ -63,11 +65,11 @@ contract SismoConnectModule is SismoConnect {
         Enum.Operation operation,
         bytes memory zkConnectResponse
     ) public virtual returns (bool success) {
-        SismoConnectVerifiedResult memory sismoConnectVerifiedResult = verify({
+        SismoConnectVerifiedResult memory result = verify({
             responseBytes: zkConnectResponse,
-            authRequest: buildAuth({ authType: AuthType.ANON }),
-            claimRequest: buildClaim({ groupId: groupId }),
-            messageSignatureRequest: abi.encode(to, value, data, operation)
+            auth: buildAuth({authType: AuthType.VAULT}),
+            claim: buildClaim({groupId: groupId}),
+            signature: buildSignature({message: abi.encode(to, value, data, operation)})
         });
 
         require(safe.execTransactionFromModule(to, value, data, operation), "Module transaction failed");
@@ -79,13 +81,13 @@ contract SismoConnectModule is SismoConnect {
         // Verify zkConnect proof
         SismoConnectVerifiedResult memory sismoConnectVerifiedResult = verify({
             responseBytes: zkConnectResponse,
-            authRequest: buildAuth({ authType: AuthType.ANON }),
-            claimRequest: buildClaim({ groupId: groupId }),
-            messageSignatureRequest: abi.encode(newOwner, threshold)
+            auth: buildAuth({ authType: AuthType.VAULT }),
+            claim: buildClaim({ groupId: groupId }),
+            signature: buildSignature({message: abi.encode(newOwner, threshold)})
         });
         
         // Call addOwnerWithThreshold function from OwnerManager contract
-        IOwnerManager.addOwnerWithThreshold(newOwner, threshold);
+        ownerManager.addOwnerWithThreshold(newOwner, threshold);
         
         // Execute Safe transaction to update the owner list and threshold
         bytes memory data = abi.encodeWithSelector(this.changeThreshold.selector, threshold);
