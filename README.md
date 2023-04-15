@@ -1,5 +1,8 @@
 # MANGO
 
+### TLDR;
+Identity preserved multisig wallet management & airdrops for GitHub orgs. Empower moderators & contributors with Sismo Connect & Safe. Decentralized rewards, privacy-first! 🥭🔐 #DeFi #blockchain
+
 ## What is Mango
 Mango is a decentralized, privacy-focused platform designed to streamline financial management for GitHub organizations, enabling moderators to securely manage funds and distribute rewards & contributors to claim their reward. Built on Goerli for now, Mango leverages Sismo Connect for anonymous authentication and Safe for account abstraction and multisig wallet functionality.
 
