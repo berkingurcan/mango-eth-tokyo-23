@@ -1,4 +1,4 @@
-# MANGO
+# MANGO 🥭
 
 ### TLDR;
 Identity preserved multisig wallet management & airdrops for GitHub orgs. Empower moderators & contributors with Sismo Connect & Safe. Decentralized rewards, privacy-first! 🥭🔐 #DeFi #blockchain
