@@ -46,3 +46,12 @@ By combining privacy, security, and convenience, Mango aims to revolutionize fin
 
 ### Similar Projects
 zkSafe: https://github.com/emilianobonassi/zkSafe
+
+
+#### DEPLOYED MANGO TOKENS FOR FURTHER USAGES :) :
+Scroll Token Contract: https://blockscout.scroll.io/address/0x07674A24e87188ff32F0ADba1A07C45Abf96F56c/contracts#address-tabs
+<br />
+Polygon Token Contract: https://polygonscan.com/tx/0x0451fff83a975506c78fbb6ae666968e044affb24d5e36c80c4cbc3ba4cdb0ac
+<br />
+[Twitter link](https://twitter.com/IzbanKokusu/status/1647370949862510593)
+
