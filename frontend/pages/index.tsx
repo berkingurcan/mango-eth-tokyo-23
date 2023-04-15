@@ -42,7 +42,7 @@ const Home: NextPage = () => {
   };
   
   const { response, responseBytes } = useSismoConnect({config: config });
-  console.log(response, responseBytes)
+  console.log(responseBytes)
 
   console.log("OWNEEER", owner1Signer)
   const ethAdapterOwner1 = new EthersAdapter({
@@ -115,9 +115,27 @@ const Home: NextPage = () => {
     ]
   })
 
+  const {addOwnerConfig} = usePrepareContractWrite({
+    address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", 
+    abi: SismoAbi, 
+    functionName: 'addOwner',
+    args: [
+      owner1Signer?.getAddress(),
+      1,
+      responseBytes
+    ]
+  })
+
+
   const { data: result, isLoading: islodin, isSuccess, write } = useContractWrite(execConfig)
+  const {data: result2, isLoading: islod, isSuccess: isUc2, write: write2 } = useContractWrite(addOwnerConfig)
+
   async function useExecTransactionFromModule() {
     write?.()
+  }
+
+  async function handleAddOwner() {
+    write2?.()
   }
 
   return (
@@ -133,45 +151,51 @@ const Home: NextPage = () => {
       <ConnectButton />
 
       <main className={styles.main}>
-        <div className={styles.card}>
-          <Button onClick={handleCreateAccount} variant="outlined">Handle Create Account </Button>
-          <h5>Your Safe Address: {safeAddress}</h5>
+        <div className={styles.grid}>
+          <div className={styles.card}>
+            <Button onClick={handleCreateAccount} variant="outlined">Handle Create Account </Button>
+            <h5>Your Safe Address: {safeAddress}</h5>
+          </div>
+          <div className={styles.card}>
+            <TextField id="standard-basic" label="amount" variant="standard" onChange={handleInputChange}/>
+            <br></br>
+            <Button onClick={handleSendEthClick} variant="outlined">Send ETH to Your Safe</Button>
+          </div>
         </div>
-        
-        <div className={styles.card}>
-          <TextField id="standard-basic" label="amount" variant="standard" onChange={handleInputChange}/>
-          <br></br>
-          <Button onClick={handleSendEthClick} variant="outlined">Send ETH to Your Safe</Button>
-        </div>
+          
+          <SismoConnectButton
+          // Use the config you defined above
+            config={config}
+            // request a proof of Data Vault Ownership
+            auths={[{authType: AuthType.VAULT}]}
+            // request a proof of group membership for `the-merge-contributor`
+            claims={[{ groupId: "0x84f8495423ea1aa1b212356f31f6c7d9" }]}
+            // request to generate a proof that can't valid without 
+            // a message chosen by the user
+            signature={{
+              // here we encode the message using ethers
+              // we encode it as an address
+              // we will use it to airdrop the ERC721 on this address in our contracts
+              message: ethers.utils.defaultAbiCoder.encode(
+                  ["address", "uint256", "bytes"],
+                  [to, value, data]
+                )
+            }}
+            onResponseBytes={(responseBytes: string) => {
+            //Send the response to your contract to verify it
+            //thanks to the @sismo-core/sismo-connect-solidity package
+            //Will see how to do this in next part of this tutorial
+            }} />
 
-        <div className={styles.card}>
-        <SismoConnectButton
-        // Use the config you defined above
-          config={config}
-          // request a proof of Data Vault Ownership
-          auths={[{authType: AuthType.VAULT}]}
-          // request a proof of group membership for `the-merge-contributor`
-          claims={[{ groupId: "0x84f8495423ea1aa1b212356f31f6c7d9" }]}
-          // request to generate a proof that can't valid without 
-          // a message chosen by the user
-          signature={{
-            // here we encode the message using ethers
-            // we encode it as an address
-            // we will use it to airdrop the ERC721 on this address in our contracts
-            message: ethers.utils.defaultAbiCoder.encode(
-                ["address", "uint256", "bytes"],
-                [to, value, data]
-              )
-          }}
-          onResponseBytes={(responseBytes: string) => {
-          //Send the response to your contract to verify it
-          //thanks to the @sismo-core/sismo-connect-solidity package
-          //Will see how to do this in next part of this tutorial
-          }} />
-        </div>
-        <div className={styles.card}>
-          <Button onClick={useExecTransactionFromModule}>Execute Transaction Send Treasury Ether to somewhere</Button>
-        </div>
+          <div className={styles.grid}>
+            <div className={styles.card}>
+              <Button onClick={useExecTransactionFromModule}>Execute Transaction Send Treasury Ether to somewhere</Button>
+            </div>
+
+            <div className={styles.card}>
+              <Button onClick={handleAddOwner}>Add Yourself Multisigner</Button>
+            </div>
+          </div>
       </main>
 
       <footer className={styles.footer}>
