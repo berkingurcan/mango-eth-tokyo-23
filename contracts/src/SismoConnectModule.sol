@@ -39,7 +39,7 @@ contract SismoConnectModule is SismoConnect {
     GnosisSafe public safe;
 
     //TODO make proxyable w/ initializer
-    constructor(address _safe, bytes16 _appId, bytes16 _groupId) ZkConnect(_appId) {
+    constructor(address _safe, bytes16 _appId, bytes16 _groupId) SismoConnect(_appId) {
         safe = GnosisSafe(_safe);
         groupId = _groupId;
     }
@@ -63,7 +63,7 @@ contract SismoConnectModule is SismoConnect {
         Enum.Operation operation,
         bytes memory zkConnectResponse
     ) public virtual returns (bool success) {
-        ZkConnectVerifiedResult memory zkConnectVerifiedResult = verify({
+        SismoConnectVerifiedResult memory sismoConnectVerifiedResult = verify({
             responseBytes: zkConnectResponse,
             authRequest: buildAuth({ authType: AuthType.ANON }),
             claimRequest: buildClaim({ groupId: groupId }),
@@ -77,7 +77,7 @@ contract SismoConnectModule is SismoConnect {
 
     function addOwner(address newOwner, uint256 threshold, bytes memory zkConnectResponse) public {
         // Verify zkConnect proof
-        ZkConnectVerifiedResult memory zkConnectVerifiedResult = verify({
+        SismoConnectVerifiedResult memory sismoConnectVerifiedResult = verify({
             responseBytes: zkConnectResponse,
             authRequest: buildAuth({ authType: AuthType.ANON }),
             claimRequest: buildClaim({ groupId: groupId }),
@@ -85,7 +85,7 @@ contract SismoConnectModule is SismoConnect {
         });
         
         // Call addOwnerWithThreshold function from OwnerManager contract
-        addOwnerWithThreshold(newOwner, threshold);
+        IOwnerManager.addOwnerWithThreshold(newOwner, threshold);
         
         // Execute Safe transaction to update the owner list and threshold
         bytes memory data = abi.encodeWithSelector(this.changeThreshold.selector, threshold);

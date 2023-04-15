@@ -2,17 +2,19 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
-import {ZKDropERC721} from "src/ZKDropERC721.sol";
+import {SismoConnectModule} from "src/SismoConnectModule.sol";
 
 contract DeployZKDrop is Script {
-    bytes16 immutable APP_ID = 0x112a692a2005259c25f6094161007967;
-    bytes16 immutable MERGOOOR_CONTRIBUTOR_GROUP_ID = 0x42c768bb8ae79e4c5c05d3b51a4ec74a;
+    function run() external {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
 
-    function run() public {
-        vm.startBroadcast();
-        ZKDropERC721 zkdrop =
-        new ZKDropERC721({appId: APP_ID, groupId: MERGOOOR_CONTRIBUTOR_GROUP_ID, name: "Mergooor Pass", symbol: "MP", baseTokenURI: "ipfs://QmPR9q3Q5fByxzfMfRp32azvH2UPXhPoDFhHWAsiGNHBwS"});
-        console.log("zkdrop deployed at", address(zkdrop));
+        address _safe = 0x0911BA4aE8D1cbC39A3f42bC9F91B06c0d681609;
+        bytes16 _appId = 0x11627eb6dd3358f8f4434a94bd15e6c5;
+        bytes16 _groupId = 0x8837536887a7f6458977b10cc464df4b;
+
+        new SismoConnectModule(_safe, _appId, _groupId);
+
         vm.stopBroadcast();
     }
 }

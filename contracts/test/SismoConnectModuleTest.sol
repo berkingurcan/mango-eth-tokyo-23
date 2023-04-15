@@ -21,7 +21,7 @@ contract SismoConnectModuleTest is Test {
         vm.selectFork(goerliFork);
         assertEq(vm.activeFork(), goerliFork);
 
-        address _safe = 0x02a3f8233efEA083666efFe40392b940c412669F;
+        address _safe = 0x0911BA4aE8D1cbC39A3f42bC9F91B06c0d681609;
         bytes16 _appId = 0x11627eb6dd3358f8f4434a94bd15e6c5;
         bytes16 _groupId = 0x8837536887a7f6458977b10cc464df4b;
 
