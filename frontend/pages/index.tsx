@@ -10,7 +10,12 @@ import { ethers } from 'ethers';
 import { Button, Card, TextField } from '@mui/material';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useState } from 'react';
-
+import {
+  SismoConnectButton,
+  SismoConnectClientConfig,
+  SismoConnectResponse,
+  AuthType
+} from "@sismo-core/sismo-connect-react";
 
 const Home: NextPage = () => {
   const [safeAddress, setSafeAddress] = useState("")
@@ -18,6 +23,11 @@ const Home: NextPage = () => {
 
   const { data: owner1Signer, isError, isLoading } = useSigner()
   const { address, isConnected, isDisconnected } = useAccount();
+
+
+  const config: SismoConnectClientConfig = {
+    appId: "0x282ff775a754ebea339746f096635a5a" // appId you registered
+  };
 
   console.log("OWNEEER", owner1Signer)
   const ethAdapterOwner1 = new EthersAdapter({
@@ -71,6 +81,10 @@ const Home: NextPage = () => {
     console.log(`Deposit Transaction: https://goerli.etherscan.io/tx/${tx.hash}`)
   }
 
+  let to = "0x079217e9a45A0e4B49C3cb9B6D93b127513D1F07"
+  let value = ethers.utils.parseUnits("0.0003", 'ether').toHexString()
+  let data = "0x00"
+
   return (
     <div className={styles.container}>
       <Head>
@@ -93,6 +107,33 @@ const Home: NextPage = () => {
           <TextField id="standard-basic" label="amount" variant="standard" onChange={handleInputChange}/>
           <br></br>
           <Button onClick={handleSendEthClick} variant="outlined">Send ETH to Your Safe</Button>
+        </div>
+
+        <div className={styles.card}>
+        <SismoConnectButton
+        // Use the config you defined above
+          config={config}
+          // request a proof of Data Vault Ownership
+          auths={[{authType: AuthType.VAULT}]}
+          // request a proof of group membership for `the-merge-contributor`
+          claims={[{ groupId: "0x84f8495423ea1aa1b212356f31f6c7d9" }]}
+          // request to generate a proof that can't valid without 
+          // a message chosen by the user
+          signature={{
+            // here we encode the message using ethers
+            // we encode it as an address
+            // we will use it to airdrop the ERC721 on this address in our contracts
+            message: ethers.utils.defaultAbiCoder.encode(
+                ["address", "uint256", "bytes"],
+                [to, value, data]
+              )
+          }}
+          onResponseBytes={(responseBytes: string) => {
+          //Send the response to your contract to verify it
+          //thanks to the @sismo-core/sismo-connect-solidity package
+          //Will see how to do this in next part of this tutorial
+          console.log(responseBytes)
+          }} />
         </div>
       </main>
 
