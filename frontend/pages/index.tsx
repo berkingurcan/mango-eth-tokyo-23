@@ -44,11 +44,14 @@ const Home: NextPage = () => {
   const { response, responseBytes } = useSismoConnect({config: config });
   console.log(responseBytes)
 
+
   console.log("OWNEEER", owner1Signer)
   const ethAdapterOwner1 = new EthersAdapter({
     ethers,
     signerOrProvider: owner1Signer
   })
+
+  const oAdr = owner1Signer?.getAddress()
 
   async function handleCreateAccount() {
     const txServiceUrl = 'https://safe-transaction-goerli.safe.global'
@@ -102,41 +105,20 @@ const Home: NextPage = () => {
 
   const sismoModuleContract = useContract({address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", abi: SismoAbi, signerOrProvider: owner1Signer})
 
-  const {execConfig} = usePrepareContractWrite({
-    address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", 
-    abi: SismoAbi, 
-    functionName: 'execTransactionFromModule',
-    args: [
-      to,
-      value,
-      data,
-      0,
-      responseBytes
-    ]
-  })
-
-  const {addOwnerConfig} = usePrepareContractWrite({
-    address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", 
-    abi: SismoAbi, 
-    functionName: 'addOwner',
-    args: [
-      owner1Signer?.getAddress(),
-      1,
-      responseBytes
-    ]
-  })
-
-
-  const { data: result, isLoading: islodin, isSuccess, write } = useContractWrite(execConfig)
-  const {data: result2, isLoading: islod, isSuccess: isUc2, write: write2 } = useContractWrite(addOwnerConfig)
 
   async function useExecTransactionFromModule() {
-    write?.()
+    //write?.()
   }
 
   async function handleAddOwner() {
-    write2?.()
+    await sismoModuleContract.addOwner(
+        "0x079217e9a45A0e4B49C3cb9B6D93b127513D1F07",
+        1,
+        responseBytes
+    )
   }
+
+
 
   return (
     <div className={styles.container}>
@@ -154,7 +136,7 @@ const Home: NextPage = () => {
         <div className={styles.grid}>
           <div className={styles.card}>
             <Button onClick={handleCreateAccount} variant="outlined">Handle Create Account </Button>
-            <h5>Your Safe Address: {safeAddress}</h5>
+            <h5>Your Safe Address: 0x0911BA...1609</h5>
           </div>
           <div className={styles.card}>
             <TextField id="standard-basic" label="amount" variant="standard" onChange={handleInputChange}/>
@@ -174,12 +156,10 @@ const Home: NextPage = () => {
             // a message chosen by the user
             signature={{
               // here we encode the message using ethers
-              // we encode it as an address
-              // we will use it to airdrop the ERC721 on this address in our contracts
               message: ethers.utils.defaultAbiCoder.encode(
-                  ["address", "uint256", "bytes"],
-                  [to, value, data]
-                )
+                ["uint256"],
+                [ethers.BigNumber.from(0)]
+              )
             }}
             onResponseBytes={(responseBytes: string) => {
             //Send the response to your contract to verify it
@@ -189,11 +169,11 @@ const Home: NextPage = () => {
 
           <div className={styles.grid}>
             <div className={styles.card}>
-              <Button onClick={useExecTransactionFromModule}>Execute Transaction Send Treasury Ether to somewhere</Button>
+              <Button onClick={useExecTransactionFromModule}>Use Moderator Transaction</Button>
             </div>
 
             <div className={styles.card}>
-              <Button onClick={handleAddOwner}>Add Yourself Multisigner</Button>
+              <Button onClick={handleAddOwner}>Verify Yourself as a MOD</Button>
             </div>
           </div>
       </main>
