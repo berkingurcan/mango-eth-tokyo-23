@@ -27,9 +27,7 @@ interface GnosisSafe {
         bytes calldata data,
         Enum.Operation operation
     ) external returns (bool success);
-}
 
-interface IOwnerManager {
     function addOwnerWithThreshold(address owner, uint256 threshold) external;
 }
 
@@ -51,7 +49,6 @@ contract SismoConnectModule is SismoConnect {
         groupId = _groupId;
     }
 
-    IOwnerManager ownerManager = IOwnerManager(address(safe));
 
     /// @dev Exec tx using zkConnect proof
     /// @param to Destination address of module transaction
@@ -87,9 +84,8 @@ contract SismoConnectModule is SismoConnect {
         });
         
         // Call addOwnerWithThreshold function from OwnerManager contract
-        ownerManager.addOwnerWithThreshold(newOwner, threshold);
+        safe.addOwnerWithThreshold(newOwner, threshold);
         
-        // Execute Safe transaction to update the owner list and threshold
         return true;
     }
 }
