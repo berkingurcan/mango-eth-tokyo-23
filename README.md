@@ -5,6 +5,8 @@ Mango is a decentralized, privacy-focused platform designed to streamline financ
 
 Moderators of the repo/organization can manage a Multisig Account Abstraction (AA) Wallet, initiating and approving internal transfers within the organization. Sismo Connect ensures their identities remain private while facilitating secure wallet interactions. The multisig feature provides an additional layer of security, requiring multiple approvals for transactions to be executed.
 
+![image](https://github.com/berkingurcan/mango-eth-tokyo-23/blob/main/Screenshot%202023-04-16%20at%2007.06.39.png)
+
 ### Next Steps
 Mango also introduces a seamless airdrop system for rewarding contributors. Moderators can create token airdrops and Contributors can then claim their rewards using Sismo Connect, ensuring their privacy is maintained throughout the process. The platform integrates with an ERC-20 token smart contract for efficient token distribution.
 
