@@ -31,6 +31,8 @@ function addOwner(address newOwner, uint256 threshold, bytes memory zkConnectRes
 }
 ```
 
+Current module contract: https://goerli.etherscan.io/address/0x9BC26354920410929aC057DaF44840168a4AD3AB#code
+
 ### Business Logic
 - Admin/Project Owner create a Safe Account
 - Some balance deposited by Funder
