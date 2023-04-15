@@ -43,3 +43,6 @@ Current module contract: https://goerli.etherscan.io/address/0x9BC26354920410929
 Mango also introduces a seamless airdrop system for rewarding contributors. Moderators can create token airdrops and Contributors can then claim their rewards using Sismo Connect, ensuring their privacy is maintained throughout the process. The platform integrates with an ERC-20 token smart contract for efficient token distribution.
 
 By combining privacy, security, and convenience, Mango aims to revolutionize financial management and rewards distribution in the GitHub ecosystem, fostering a more collaborative and engaging environment for open-source projects.
+
+### Similar Projects
+zkSafe: https://github.com/emilianobonassi/zkSafe
