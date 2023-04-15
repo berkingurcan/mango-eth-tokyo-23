@@ -7,7 +7,7 @@ import { SafeFactory } from '@safe-global/protocol-kit'
 import SafeApiKit from '@safe-global/api-kit'
 import { SafeAccountConfig } from '@safe-global/protocol-kit'
 import { ethers } from 'ethers';
-import { Button, TextField } from '@mui/material';
+import { Button, Card, TextField } from '@mui/material';
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { useState } from 'react';
 
@@ -84,10 +84,16 @@ const Home: NextPage = () => {
       <ConnectButton />
 
       <main className={styles.main}>
-        <Button onClick={handleCreateAccount}>Handle Create Account </Button>
-        <h5>Your Safe Address: {safeAddress}</h5>
-        <TextField id="standard-basic" label="Standard" variant="standard" onChange={handleInputChange}/>
-        <Button onClick={handleSendEthClick}>Send ETH to Your Safe</Button>
+        <div className={styles.card}>
+          <Button onClick={handleCreateAccount} variant="outlined">Handle Create Account </Button>
+          <h5>Your Safe Address: {safeAddress}</h5>
+        </div>
+        
+        <div className={styles.card}>
+          <TextField id="standard-basic" label="amount" variant="standard" onChange={handleInputChange}/>
+          <br></br>
+          <Button onClick={handleSendEthClick} variant="outlined">Send ETH to Your Safe</Button>
+        </div>
       </main>
 
       <footer className={styles.footer}>
