@@ -31,6 +31,12 @@ function addOwner(address newOwner, uint256 threshold, bytes memory zkConnectRes
 }
 ```
 
+### Business Logic
+- Admin/Project Owner create a Safe Account
+- Some balance deposited by Funder
+- Project Mods can claim themselves as Multisig signer while ensuring their privacy
+- And according to Wallet's functionality they can use its balance or approve transaction requests
+
 ### Next Steps
 Mango also introduces a seamless airdrop system for rewarding contributors. Moderators can create token airdrops and Contributors can then claim their rewards using Sismo Connect, ensuring their privacy is maintained throughout the process. The platform integrates with an ERC-20 token smart contract for efficient token distribution.
 
