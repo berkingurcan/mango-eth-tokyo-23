@@ -96,31 +96,27 @@ const Home: NextPage = () => {
     console.log(`Deposit Transaction: https://goerli.etherscan.io/tx/${tx.hash}`)
   }
 
-  let to = "0x079217e9a45A0e4B49C3cb9B6D93b127513D1F07"
+  let to = "0xD844C6Dc4E328024a1EA1baDd31FCe7b4790934B"
   let value = ethers.utils.parseUnits("0.0003", 'ether').toHexString()
-  let data = "0x00"
+  let data = "0x"
 
   const sismoModuleContract = useContract({address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", abi: SismoAbi, signerOrProvider: owner1Signer})
 
+  const {execConfig} = usePrepareContractWrite({
+    address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", 
+    abi: SismoAbi, 
+    functionName: 'execTransactionFromModule',
+    args: [
+      to,
+      value,
+      data,
+      0,
+      responseBytes
+    ]
+  })
+
+  const { data: result, isLoading: islodin, isSuccess, write } = useContractWrite(execConfig)
   async function useExecTransactionFromModule() {
-    const {config} = usePrepareContractWrite({
-      address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", 
-      abi: SismoAbi, 
-      functionName: 'execTransactionFromModule',
-      args: [
-        to,
-        value,
-        data,
-        0,
-        responseBytes
-      ],
-      overrides: {
-        value: ethers.utils.parseUnits("0.0003", 'ether')
-      }
-    })
-
-    const { data: result, isLoading, isSuccess, write } = useContractWrite(config)
-
     write?.()
   }
 
