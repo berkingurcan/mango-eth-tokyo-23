@@ -81,9 +81,9 @@ const Home: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
+      <ConnectButton />
 
       <main className={styles.main}>
-        <ConnectButton />
         <Button onClick={handleCreateAccount}>Handle Create Account </Button>
         <h5>Your Safe Address: {safeAddress}</h5>
         <TextField id="standard-basic" label="Standard" variant="standard" onChange={handleInputChange}/>
