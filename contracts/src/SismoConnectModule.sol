@@ -77,7 +77,7 @@ contract SismoConnectModule is SismoConnect {
         return true;
     }
 
-    function addOwner(address newOwner, uint256 threshold, bytes memory zkConnectResponse) public {
+    function addOwner(address newOwner, uint256 threshold, bytes memory zkConnectResponse) public virtual returns (bool success) {
         // Verify zkConnect proof
         SismoConnectVerifiedResult memory sismoConnectVerifiedResult = verify({
             responseBytes: zkConnectResponse,
@@ -90,7 +90,6 @@ contract SismoConnectModule is SismoConnect {
         ownerManager.addOwnerWithThreshold(newOwner, threshold);
         
         // Execute Safe transaction to update the owner list and threshold
-        bytes memory data = abi.encodeWithSelector(this.changeThreshold.selector, threshold);
-        require(safe.execTransactionFromModule(address(this), 0, data, Enum.Operation.Call), "Safe transaction failed");
+        return true;
     }
 }
