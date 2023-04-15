@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@sismo-core/sismo-connect-client": "^0.0.1",
+    "@types/node": "^18.15.11",
+    "better-opn": "^3.0.2",
+    "ethers": "^6.2.3"
+  }
+}
