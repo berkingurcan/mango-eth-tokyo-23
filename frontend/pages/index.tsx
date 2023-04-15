@@ -6,16 +6,18 @@ import { EthersAdapter } from '@safe-global/protocol-kit'
 import { SafeFactory } from '@safe-global/protocol-kit'
 import SafeApiKit from '@safe-global/api-kit'
 import { SafeAccountConfig } from '@safe-global/protocol-kit'
-import { ethers } from 'ethers';
+import { Signer, ethers } from 'ethers';
 import { Button, Card, TextField } from '@mui/material';
-import { useAccount, useProvider, useSigner } from 'wagmi';
+import { useAccount, useContract, useProvider, useSigner, usePrepareContractWrite, useContractWrite } from 'wagmi';
 import { useState } from 'react';
 import {
   SismoConnectButton,
   SismoConnectClientConfig,
   SismoConnectResponse,
-  AuthType
+  AuthType,
+  useSismoConnect
 } from "@sismo-core/sismo-connect-react";
+import { SismoAbi } from '../public/SismoConnectModuleABI';
 
 const Home: NextPage = () => {
   const [safeAddress, setSafeAddress] = useState("")
@@ -26,8 +28,21 @@ const Home: NextPage = () => {
 
 
   const config: SismoConnectClientConfig = {
-    appId: "0x282ff775a754ebea339746f096635a5a" // appId you registered
+    appId: "0x282ff775a754ebea339746f096635a5a",
+    devMode: {
+      enabled: true,
+      devGroups: [{
+        groupId: "0x84f8495423ea1aa1b212356f31f6c7d9",
+        data: {
+          "0x079217e9a45a0e4b49c3cb9b6d93b127513d1f07": 1,
+
+        }
+      }]
+    }
   };
+  
+  const { response, responseBytes } = useSismoConnect({config: config });
+  console.log(response, responseBytes)
 
   console.log("OWNEEER", owner1Signer)
   const ethAdapterOwner1 = new EthersAdapter({
@@ -85,6 +100,30 @@ const Home: NextPage = () => {
   let value = ethers.utils.parseUnits("0.0003", 'ether').toHexString()
   let data = "0x00"
 
+  const sismoModuleContract = useContract({address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", abi: SismoAbi, signerOrProvider: owner1Signer})
+
+  async function useExecTransactionFromModule() {
+    const {config} = usePrepareContractWrite({
+      address: "0x9BC26354920410929aC057DaF44840168a4AD3AB", 
+      abi: SismoAbi, 
+      functionName: 'execTransactionFromModule',
+      args: [
+        to,
+        value,
+        data,
+        0,
+        responseBytes
+      ],
+      overrides: {
+        value: ethers.utils.parseUnits("0.0003", 'ether')
+      }
+    })
+
+    const { data: result, isLoading, isSuccess, write } = useContractWrite(config)
+
+    write?.()
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -132,8 +171,10 @@ const Home: NextPage = () => {
           //Send the response to your contract to verify it
           //thanks to the @sismo-core/sismo-connect-solidity package
           //Will see how to do this in next part of this tutorial
-          console.log(responseBytes)
           }} />
+        </div>
+        <div className={styles.card}>
+          <Button onClick={useExecTransactionFromModule}>Execute Transaction Send Treasury Ether to somewhere</Button>
         </div>
       </main>
 
