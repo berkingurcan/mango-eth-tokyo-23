@@ -6,8 +6,7 @@ import {SismoConnectModule} from "src/SismoConnectModule.sol";
 
 contract DeployZKDrop is Script {
     function run() external {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
+        vm.startBroadcast();
 
         address _safe = 0x0911BA4aE8D1cbC39A3f42bC9F91B06c0d681609;
         bytes16 _appId = 0x282ff775a754ebea339746f096635a5a;

@@ -3,6 +3,9 @@ optimizer_runs = 1000000
 verbosity = 1
 libs = ["node_modules", "lib"]
 
+[rpc_endpoints]
+goerli = "${RPC_URL}"
+
 [fmt]
 line_length = 100
 tab_spaces = 2
