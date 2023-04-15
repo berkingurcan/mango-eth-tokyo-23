@@ -169,12 +169,18 @@ const Home: NextPage = () => {
 
           <div className={styles.grid}>
             <div className={styles.card}>
-              <Button onClick={useExecTransactionFromModule}>Use Moderator Transaction</Button>
+              <TextField id="standard-basic" label="amount" variant="standard" onChange={handleInputChange}/>
+              <Button onClick={useExecTransactionFromModule}>Request Transaction</Button>
             </div>
 
             <div className={styles.card}>
               <Button onClick={handleAddOwner}>Verify Yourself as a MOD</Button>
             </div>
+          </div>
+
+          <div className={styles.card}>
+            <h4>TX REQUEST: XYZABC</h4>
+            <Button>APPROVE TX REQUEST</Button>
           </div>
       </main>
 
